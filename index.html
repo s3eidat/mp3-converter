@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>MP3 Converter — Convert Video &amp; Audio to MP3 in Your Browser, Free | S3eidat Tools</title>
+<meta name="description" content="Turn MP4, WebM, MOV, WAV, M4A, OGG or FLAC into MP3 (96 to 320 kbps) or WAV. Trim, fade, mono, normalize, batch convert. Free and private: nothing is uploaded.">
+<meta property="og:title" content="MP3 Converter — free, private video and audio to MP3">
+<meta property="og:description" content="Convert video or audio files to MP3 or WAV. Runs 100% in your browser.">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<!--s3:seo-->
+<link rel="canonical" href="https://s3eidat.github.io/mp3-converter/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="S3eidat Tools">
+<meta property="og:url" content="https://s3eidat.github.io/mp3-converter/">
+<meta property="og:image" content="https://s3eidat.github.io/mp3-converter/screenshot.png">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="800">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MP3 Converter — Turn video or audio into MP3">
+<meta name="twitter:description" content="Turn video or audio into MP3. Free, private and runs 100% in your browser: no sign-up, no uploads.">
+<meta name="twitter:image" content="https://s3eidat.github.io/mp3-converter/screenshot.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "MP3 Converter", "url": "https://s3eidat.github.io/mp3-converter/", "description": "Turn video or audio into MP3. Free, private and runs 100% in your browser: no sign-up, no uploads.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://s3eidat.github.io/mp3-converter/screenshot.png", "author": {"@type": "Person", "name": "s3eidat", "url": "https://github.com/s3eidat"}}</script>
+<!--/s3:seo-->
+</head>
+<body data-tool="mp3-converter">
+<main class="s3-main">
+  <section class="s3-hero">
+    <h1>MP3 Converter</h1>
+    <p>Turn a video or any audio file into an MP3 or WAV. Trim it, fade it, make it mono, convert a whole batch. Everything happens on your device; your files are never uploaded.</p>
+  </section>
+
+  <section class="card stack">
+    <div class="mc-opts">
+      <div class="field"><span>Output</span>
+        <div class="seg" id="fmt" role="group" aria-label="Output format">
+          <button aria-pressed="true" data-v="mp3">MP3</button>
+          <button aria-pressed="false" data-v="wav">WAV</button>
+        </div>
+      </div>
+      <div class="field" id="kbpsWrap"><span>MP3 bitrate (kbps)</span>
+        <div class="seg" id="kbps" role="group" aria-label="Bitrate">
+          <button aria-pressed="false" data-v="96">96</button>
+          <button aria-pressed="false" data-v="128">128</button>
+          <button aria-pressed="true" data-v="192">192</button>
+          <button aria-pressed="false" data-v="256">256</button>
+          <button aria-pressed="false" data-v="320">320</button>
+        </div>
+      </div>
+      <div class="field"><span>Channels</span>
+        <div class="seg" id="chan" role="group" aria-label="Channels">
+          <button aria-pressed="true" data-v="2">Stereo</button>
+          <button aria-pressed="false" data-v="1">Mono</button>
+        </div>
+      </div>
+      <label class="field">Sample rate
+        <select class="select" id="rate">
+          <option value="48000">48 kHz</option>
+          <option value="44100" selected>44.1 kHz (music, standard)</option>
+          <option value="32000">32 kHz</option>
+          <option value="22050">22.05 kHz (voice, smaller)</option>
+          <option value="16000">16 kHz (speech)</option>
+        </select>
+      </label>
+      <label class="field mc-range">Fade in <span class="mc-val" id="fiV">0 s</span><input type="range" id="fadeIn" min="0" max="5" step="0.1" value="0"></label>
+      <label class="field mc-range">Fade out <span class="mc-val" id="foV">0 s</span><input type="range" id="fadeOut" min="0" max="5" step="0.1" value="0"></label>
+      <label class="check" title="Scale the level so the loudest peak sits at -1 dB"><input type="checkbox" id="norm"> Normalize volume</label>
+    </div>
+
+    <label class="drop" id="drop">
+      <input type="file" hidden>
+      <svg class="i"><use href="#i-upload"/></svg>
+      <b>Drop video or audio files</b>
+      <span>MP4, WebM, MOV, MKV, WAV, M4A/AAC, OGG, Opus, FLAC, MP3: whatever this browser can play</span>
+    </label>
+  </section>
+
+  <section class="card stack mt" id="list" hidden>
+    <div class="row between">
+      <h2>Files <small id="count"></small></h2>
+      <div class="row">
+        <button class="btn ghost small" id="clearAll"><svg class="i"><use href="#i-trash"/></svg>Clear</button>
+        <button class="btn small" id="zip" disabled><svg class="i"><use href="#i-download"/></svg>All (.zip)</button>
+        <button class="btn primary" id="go"><svg class="i"><use href="#i-play"/></svg>Convert all</button>
+      </div>
+    </div>
+    <div class="mc-rows" id="rows"></div>
+    <p class="faint mc-hint">Start and End trim each file (seconds or m:ss). Settings above apply to every conversion; change them and press Convert again for a new version.</p>
+  </section>
+</main>
+<script src="lib/lame.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
